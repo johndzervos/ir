@@ -8,6 +8,8 @@ from nltk.stem.wordnet import WordNetLemmatizer
 stemmer=PorterStemmer()
 lemmatizer = WordNetLemmatizer()
 
+#
+#
 #1st step - collect documents to be indexed
 file_content = open("CSIRO063-12268790.txt").read()
 file_content = file_content.lower()
