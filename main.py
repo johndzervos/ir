@@ -40,6 +40,7 @@ for docname in doclist:
     t.sortTerms()
     #print t.file
     print len(t.file)
+    #print t.termFrequency('bioindic')
     #make a class Document whre we put the content of the doc,its name....
     #now we put the length of a file in the doc, later the term freq
     d=Document(t.file,len(t.file),docname)
