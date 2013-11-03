@@ -1,4 +1,4 @@
-class InvertedIndex():
+class InvertedIndex(): 
     def __init__(self,listOfDocs):
         self.listOfDocs=listOfDocs
         self.index={}
