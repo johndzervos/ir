@@ -21,7 +21,7 @@ for docname in doclist:
         docname = docname[:-4]
         #print docname
     print docname
-    file_content = open(docname+".txt").read()
+    file_content = open("sampleCollection/"+docname+".txt").read()
     t=TextPreProcessor(file_content)
     #print t.file
     t.lowerCase()
@@ -40,16 +40,18 @@ for docname in doclist:
     t.sortTerms()
     #print t.file
     print len(t.file)
-    #make a class Document whre we put the content of the doc,its name....
+    #make a class Document where we put the content of the doc,its name....
     #now we put the length of a file in the doc, later the term freq
     d=Document(t.file,docname)
     #puth the docs in a list
     listOfDocs.append(d)
 #call the class inverted index which has an input a list of Documents
 indexInverted=InvertedIndex(listOfDocs)
+
 indexInverted.createIndex()
 print indexInverted.index
-
+#for i in indexInverted.index:
+#    print i.keys
 
     
         

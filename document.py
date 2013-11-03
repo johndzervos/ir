@@ -11,4 +11,3 @@ class Document():
                 noOccurences = noOccurences + 1
         return noOccurences
 
-#test
