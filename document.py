@@ -1,8 +1,8 @@
 class Document():
-    def __init__(self, doc,length, docId):
+    def __init__(self, doc, docId):
         self.doc= doc
         self.docId=docId
-        self.length=length
+        self.length=len(doc)
 
     def termFrequency(self, term):
         noOccurences = 0
