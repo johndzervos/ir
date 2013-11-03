@@ -5,8 +5,6 @@ class InvertedIndex():
     def createIndex(self):
         for d in self.listOfDocs:
             for w in d.doc:
-                if w in self.index.keys():
-                    self.index[w][d.docId]=d.length
-                else:
+                if w not in self.index.keys():
                     self.index[w]={}
-                    self.index[w][d.docId]=d.length
+                self.index[w][d.docId]=d.length
