@@ -10,3 +10,4 @@ class Document():
             if term == word:
                 noOccurences = noOccurences + 1
         return noOccurences
+
