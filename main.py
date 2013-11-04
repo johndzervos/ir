@@ -2,6 +2,7 @@ from textPreProcessor import *
 from document import * 
 from invertedIndex import * 
 import glob
+
 invIndex = []
 #postList = []
 #postListEntry = {'docname': 'asdf', 'tf': 1}
@@ -11,10 +12,11 @@ invIndex = []
     
 #process each document in the directory 'collection'
 doclist = glob.glob("sampleCollection/*.txt")
+print len(doclist)
 listOfDocs=[]
 for docname in doclist:
     #remove the starting substring 'collection/'
-    if docname.startswith('sampleCollection/'):
+    if docname.startswith('sampleCollection\\'):
         docname = docname[17:]   
     #remove the ending substring '.txt' 
     if docname.endswith('.txt'):
