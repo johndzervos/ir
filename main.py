@@ -2,6 +2,7 @@ from textPreProcessor import *
 from document import * 
 from invertedIndex import * 
 import glob
+import collections
 invIndex = []
 #postList = []
 #postListEntry = {'docname': 'asdf', 'tf': 1}
