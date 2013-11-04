@@ -29,7 +29,7 @@ for docname in doclist:
     t.removeOddCharacters()
     #print t.file
     t.wordTokenization()
-    #print t.file
+    print "initial tokens: "+str(len(t.file))
     t.removeStopwords()
     #print t.file
     t.removeDuplicates()
@@ -39,7 +39,7 @@ for docname in doclist:
     t.removeDuplicates()
     t.sortTerms()
     #print t.file
-    print len(t.file)
+    print "tokens after preprocessing: "+str(len(t.file))
     #make a class Document where we put the content of the doc,its name....
     #now we put the length of a file in the doc, later the term freq
     d=Document(t.file,docname)
@@ -49,7 +49,7 @@ for docname in doclist:
 indexInverted=InvertedIndex(listOfDocs)
 
 indexInverted.createIndex()
-print indexInverted.index
+#print indexInverted.index
 #for i in indexInverted.index:
 #    print i.keys
 
