@@ -9,11 +9,17 @@ print len(doclist)
 listOfDocs=[]
 for docname in doclist:
     #remove the starting substring 'collection/'
-    if docname.startswith('sampleCollection\\'):
-        docname = docname[17:]   
+    #starting substring
+    startstring = 'sampleCollection/'   
+    #ending substring
+    endstring = '.txt'
+    if docname.startswith(startstring):
+        strlen = len(startstring)
+        docname = docname[strlen:]   
     #remove the ending substring '.txt' 
-    if docname.endswith('.txt'):
-        docname = docname[:-4]
+    if docname.endswith(endstring):
+        strlen2 = len(endstring)
+        docname = docname[:-strlen2]
         #print docname
     print docname
     file_content = open("sampleCollection/"+docname+".txt").read()
