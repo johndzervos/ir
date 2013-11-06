@@ -2,13 +2,6 @@ from textPreProcessor import *
 from document import * 
 from invertedIndex import * 
 import glob
-
-invIndex = []
-#postList = []
-#postListEntry = {'docname': 'asdf', 'tf': 1}
-#indexEntry = {'term': 'some val', 'docFreq': 1, 'postList': []}
-#indexEntry['postList'].append(postListEntry)
-#invIndex.append(indexEntry)
     
 #process each document in the directory 'collection'
 doclist = glob.glob("sampleCollection/*.txt")
@@ -24,36 +17,24 @@ for docname in doclist:
         #print docname
     print docname
     file_content = open("sampleCollection/"+docname+".txt").read()
-    t=TextPreProcessor(file_content)
+    d=Document(file_content,docname)
     #print t.file
-    t.lowerCase()
+    d.lowerCase()
     #print t.file
-    t.removeOddCharacters()
-    #print t.file
-    t.wordTokenization()
-    print "initial tokens: "+str(len(t.file))
-    t.removeStopwords()
-    #print t.file
-    t.removeDuplicates()
-    #print t.file
-    t.stemming()
-    #print t.file
-    t.removeDuplicates()
-    t.sortTerms()
-    #print t.file
-    print "tokens after preprocessing: "+str(len(t.file))
-    #make a class Document where we put the content of the doc,its name....
-    #now we put the length of a file in the doc, later the term freq
-    d=Document(t.file,docname)
-    #puth the docs in a list
+    d.removeOddCharacters()
+    d.wordTokenization()
+    d.removeStopwords()
+    d.stemming()
+    d.sortTerms()
     listOfDocs.append(d)
 #call the class inverted index which has an input a list of Documents
 indexInverted=InvertedIndex(listOfDocs)
 
 indexInverted.createIndex()
-#print indexInverted.index
-#for i in indexInverted.index:
-#    print i.keys
+for i in indexInverted.index.items():
+    print i
+##print indexInverted.index.items()[3][1]
+##miniList=indexInverted.index.items()[3][1]
 
     
         
