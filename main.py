@@ -2,7 +2,7 @@ from textPreProcessor import *
 from document import * 
 from invertedIndex import * 
 import glob
-
+import collections
 invIndex = []
 #postList = []
 #postListEntry = {'docname': 'asdf', 'tf': 1}
@@ -51,7 +51,17 @@ for docname in doclist:
 indexInverted=InvertedIndex(listOfDocs)
 
 indexInverted.createIndex()
-print indexInverted.index
+print indexInverted.index.items()
+print "final result"
+print indexInverted.index.items()[3]
+print indexInverted.index.items()[3][0]
+print indexInverted.index.items()[3][1]
+print indexInverted.index.items()[3][1].keys()[0]
+print indexInverted.index.items()[3][1].values()[0]
+print indexInverted.index.items()[3][1].keys()
+print indexInverted.index.items()[3][1].values()
+#print [x[0] for x in indexInverted.index.items()[0][1]]
+#print indexInverted.index.items()[0][1]
 #for i in indexInverted.index:
 #    print i.keys
 
