@@ -32,7 +32,7 @@ for docname in doclist:
     #print t.file
     t.wordTokenization()
     print "initial tokens: "+str(len(t.file))
-    t.removeStopwords()
+    #t.removeStopwords()
     #print t.file
     t.removeDuplicates()
     #print t.file
