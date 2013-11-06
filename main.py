@@ -38,7 +38,7 @@ for docname in doclist:
     #print t.file
     t.stemming()
     #print t.file
-    t.removeDuplicates()
+    #t.removeDuplicates()
     t.sortTerms()
     #print t.file
     print "tokens after preprocessing: "+str(len(t.file))
