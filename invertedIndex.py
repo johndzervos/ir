@@ -6,8 +6,9 @@ class InvertedIndex():
     
     def createIndex(self):
         for d in self.listOfDocs:
-            for w in d.doc:
+            for w in d.file:
                 if w not in self.index.keys():
                     self.index[w]={}
                 self.index[w][d.docId]=d.termFrequency(w)
+                #self.index[w][d.docId]=d.termFreq
         self.index = collections.OrderedDict(sorted(self.index.items()))
