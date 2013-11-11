@@ -53,7 +53,7 @@ print len(InvertedIndex['of'])
 #    print i
 
 pickle.dump(InvertedIndex, open("SavedInvertedIndex.p", "wb"))
-loaded_data = pickle.load( open( "SavedInvertedIndex.p", "rb" ))
+loaded_data = pickle.load(open( "SavedInvertedIndex.p", "rb" ))
 for i in loaded_data.items():
     print i
 
