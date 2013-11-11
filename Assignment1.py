@@ -1,4 +1,4 @@
-import glob, re, nltk, string
+import glob, re, nltk, string, pickle
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
@@ -49,5 +49,11 @@ print len(InvertedIndex)
 print InvertedIndex['of']
 print len(InvertedIndex['of'])
 # the Inverted Index
-for i in InvertedIndex.items():
+#for i in InvertedIndex.items():
+#    print i
+
+pickle.dump(InvertedIndex, open("SavedInvertedIndex.p", "wb"))
+loaded_data = pickle.load( open( "SavedInvertedIndex.p", "rb" ))
+for i in loaded_data.items():
     print i
+
