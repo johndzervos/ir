@@ -33,6 +33,7 @@ class Document():
             if word not in stopwords.words('english'):
                 tokens.append(word)
         self.file=tokens
+        #self.file = [w for w in self.file if w not in stopwords.words('english')]
 
     def removeDuplicates(self):
         noDuplicates=[]
@@ -54,7 +55,6 @@ class Document():
         self.file=sortedFile
 
     def wordLemmatization(self):
-        #should be working now
         lemmatizer = WordNetLemmatizer()
         lemmatization_result = []
         for word in self.file:

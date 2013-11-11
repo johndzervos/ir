@@ -1,0 +1,53 @@
+import glob, re, nltk, string
+from nltk.stem import PorterStemmer
+from nltk.corpus import stopwords
+from nltk.stem.wordnet import WordNetLemmatizer
+from collections import defaultdict
+
+#process each document in the directory 'collection'
+doclist = glob.glob("collection/*.txt")
+startstring = 'collection\\'
+strlenStartString = len(startstring)
+endstring = '.txt'
+strlenEndString = len(endstring)
+
+stemmer=PorterStemmer()
+InvertedIndex = {}
+
+for docname in doclist:
+    if docname.startswith(startstring):
+        docname = docname[strlenStartString:]
+    if docname.endswith(endstring):
+        docname = docname[:-strlenEndString]
+    print docname
+    file_content = open("collection/"+docname+".txt").read()
+    file_content = file_content.lower()
+    #remove odd chars
+    file_content = re.sub(r'[^a-z0-9 ]',' ',file_content)
+    #remove duplicates
+    #file_content = re.sub(r'\b(\w+)( \1\b)+', r'\1', file_content)
+    #remove punctuation
+    file_content = re.sub('[%s]' % re.escape(string.punctuation), '', file_content)
+    #tokenization
+    file_content = nltk.word_tokenize(file_content)
+    #stemming + count term frequency
+    d = defaultdict(int)
+    stemmed_Words = []
+    for word in file_content:
+        stemmedWord = stemmer.stem(word)
+        stemmed_Words.append(stemmedWord)
+        d[stemmedWord] += 1
+        
+    #build the inverted index
+    for word in stemmed_Words:
+        locations = InvertedIndex.setdefault(word, {})
+        locations[docname] = d[word]
+    
+# total number of tokens
+print len(InvertedIndex)
+# total count of the token 'of'
+print InvertedIndex['of']
+print len(InvertedIndex['of'])
+# the Inverted Index
+for i in InvertedIndex.items():
+    print i
