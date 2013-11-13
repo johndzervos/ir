@@ -62,3 +62,13 @@ loaded_data = pickle.load(open( "SavedInvertedIndex.p", "rb" ))
 #for i in loaded_data.items():
 #    print i
 
+idxof = loaded_data['of'].items()
+cnt = 0
+for i in idxof:
+    #print i[1]
+    cnt = cnt + i[1]
+
+print "Of appears: " + str(cnt)
+
+
+
