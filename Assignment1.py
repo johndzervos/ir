@@ -13,6 +13,7 @@ strlenEndString = len(endstring)
 
 stemmer=PorterStemmer()
 InvertedIndex = {}
+tot_tokens = []
 
 for docname in doclist:
     if docname.startswith(startstring):
@@ -20,7 +21,7 @@ for docname in doclist:
     if docname.endswith(endstring):
         docname = docname[:-strlenEndString]
     print docname
-    file_content = open("collection/"+docname+".txt").read()
+    file_content = open(docname+".txt").read()
     file_content = file_content.lower()
     #remove odd chars
     file_content = re.sub(r'[^a-z0-9 ]',' ',file_content)
@@ -30,6 +31,8 @@ for docname in doclist:
     file_content = re.sub('[%s]' % re.escape(string.punctuation), '', file_content)
     #tokenization
     file_content = nltk.word_tokenize(file_content)
+    print "tokens before preprocessing: "+str(len(file_content))
+    tot_tokens.append(len(file_content))
     #stemming + count term frequency
     d = defaultdict(int)
     stemmed_Words = []
@@ -42,18 +45,20 @@ for docname in doclist:
     for word in stemmed_Words:
         locations = InvertedIndex.setdefault(word, {})
         locations[docname] = d[word]
-    
+
+print "total tokens: "+str(sum(tot_tokens))
+print "unique terms: "+str(len(InvertedIndex)) 
 # total number of tokens
-print len(InvertedIndex)
+#print len(InvertedIndex)
 # total count of the token 'of'
-print InvertedIndex['of']
-print len(InvertedIndex['of'])
+#print InvertedIndex['of']
+#print len(InvertedIndex['of'])
 # the Inverted Index
 #for i in InvertedIndex.items():
 #    print i
 
 pickle.dump(InvertedIndex, open("SavedInvertedIndex.p", "wb"))
 loaded_data = pickle.load(open( "SavedInvertedIndex.p", "rb" ))
-for i in loaded_data.items():
-    print i
+#for i in loaded_data.items():
+#    print i
 
