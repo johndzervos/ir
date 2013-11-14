@@ -54,8 +54,9 @@ for docname in doclist:
         locations = InvertedIndex.setdefault(word, {})
         locations[docname] = d[word]
         #d[word] += 1#float(d[stemmedWord]/len(stemmed_Words))
-        d[word] = float(d[word]/len(stemmed_Words))
-        print word, d[word]
+        #d[word] = float(d[word]/len(stemmed_Words))
+        termFrequency = float(d[word])/len(stemmed_Words)
+        #print word, "freq of word" + str(d[word]), "term freq:" + str(termFrequency)
 
 
 print "total tokens: "+str(sum(tot_tokens))
@@ -72,7 +73,7 @@ print "unique terms: "+str(len(InvertedIndex))
 pickle.dump(InvertedIndex, open("SavedInvertedIndex.p", "wb"))
 
 
-loaded_data = pickle.load(open( "SavedInvertedIndex.p", "rb" ))
+#loaded_data = pickle.load(open( "SavedInvertedIndex.p", "rb" ))
 #for i in loaded_data.items():
 #    print i
 
