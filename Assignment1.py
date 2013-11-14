@@ -48,26 +48,24 @@ for docname in doclist:
             stemmedWord = word        
             stemmed_Words.append(stemmedWord)
             d[stemmedWord] += 1
-        
-    #build the inverted index
+
+    stemlen = len(stemmed_Words)
+    noDuplicates= []   
     for word in stemmed_Words:
-        locations = InvertedIndex.setdefault(word, {})
+        if word not in noDuplicates:
+            noDuplicates.append(word)
+
+    #build the inverted index
+    for word in noDuplicates:
+        locations = InvertedIndex.setdefault(word, {})       
+        d[word] = float(d[word])/stemlen
         locations[docname] = d[word]
-        #d[word] += 1#float(d[stemmedWord]/len(stemmed_Words))
-        d[word] = float(d[word]/len(stemmed_Words))
-        print word, d[word]
+        #print word, d[word]
 
 
 print "total tokens: "+str(sum(tot_tokens))
 print "unique terms: "+str(len(InvertedIndex)) 
-# total number of tokens
-#print len(InvertedIndex)
-# total count of the token 'of'
-#print InvertedIndex['of']
-#print len(InvertedIndex['of'])
-# the Inverted Index
-#for i in InvertedIndex.items():
-#    print i
+
 
 pickle.dump(InvertedIndex, open("SavedInvertedIndex.p", "wb"))
 
@@ -77,14 +75,12 @@ loaded_data = pickle.load(open( "SavedInvertedIndex.p", "rb" ))
 #    print i
 
 #idxof = loaded_data['of'].items()
-cnt = 0
+#cnt = 0
 #for i in idxof:
     #print i[1]
     #cnt = cnt + i[1]
 
 #print "Of appears: " + str(cnt)
 
-#for i in loaded_data:
-    #print i+" "+str(loaded_data[i])+" "+str(len(loaded_data[i]))
 
 
