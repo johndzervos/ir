@@ -21,7 +21,7 @@ for docname in doclist:
     if docname.endswith(endstring):
         docname = docname[:-strlenEndString]
     print docname
-    file_content = open(docname+".txt").read()
+    file_content = open("collection\\" + docname+".txt").read()
     file_content = file_content.lower()
     #remove odd chars
     file_content = re.sub(r'[^a-z0-9 ]',' ',file_content)
