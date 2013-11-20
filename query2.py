@@ -62,17 +62,27 @@ for i in processedQuery:
 for i in newIndex:
     print i
 
+<<<<<<< HEAD
 newIndex[0].values()[0] #the term
 newIndex[0].values()[1] #the posting list
 newIndex[0].values()[1][0] #name of the first document + term freq in that doc
 newIndex[0].values()[1][1] #name of the second doc + term freq in that document
 newIndex[0].values()[1][0][0] #name of the first document
 newIndex[0].values()[1][0][1] # term frequency in the first doc
+=======
+newIndex[0]['term'] #the term
+newIndex[0]['postlist'] #the posting list
+newIndex[0]['postlist'][0][0] #name of the document
+newIndex[0]['postlist'][0][1] #term freq in that document
+len(newIndex[0]['postlist']) #doc freq
+>>>>>>> 097cd904ee585333aa5600b3d471881287e783a6
 
 doclist=[]
+docnames=[]
 
 for i in range(len(newIndex)):
     for j in range(len(newIndex[i].values()[1])):
+<<<<<<< HEAD
         dname = newIndex[i].values()[1][j][0]
         termFrequency = newIndex[i].values()[1][j][1]
         print dname
@@ -81,6 +91,19 @@ for i in range(len(newIndex)):
 
 print doclist
 
+=======
+        ent = []
+        dname = newIndex[i]['postlist'][j][0]
+        print dname +" in newIndex"
+        #ent = {'docname':dname}
+        for k in doclist:
+            print k['docname'] +" in doclist"
+            if k['docname'] == dname:
+                print "aaa"
+            else:
+                print "bbb"
+        #docnames.append(dname)
+>>>>>>> 097cd904ee585333aa5600b3d471881287e783a6
 
     
 
