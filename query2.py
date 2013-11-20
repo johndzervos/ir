@@ -62,18 +62,28 @@ for i in processedQuery:
 for i in newIndex:
     print i
 
-newIndex[0].values()[0] #the term
-newIndex[0].values()[1] #the posting list
-newIndex[0].values()[1][0] #name of the document
-newIndex[0].values()[1][1] #term freq in that document
+newIndex[0]['term'] #the term
+newIndex[0]['postlist'] #the posting list
+newIndex[0]['postlist'][0][0] #name of the document
+newIndex[0]['postlist'][0][1] #term freq in that document
+len(newIndex[0]['postlist']) #doc freq
 
 doclist=[]
+docnames=[]
 
 for i in range(len(newIndex)):
     for j in range(len(newIndex[i].values()[1])):
-        dname = newIndex[i].values()[1][j][0]
-        print dname
-
+        ent = []
+        dname = newIndex[i]['postlist'][j][0]
+        print dname +" in newIndex"
+        #ent = {'docname':dname}
+        for k in doclist:
+            print k['docname'] +" in doclist"
+            if k['docname'] == dname:
+                print "aaa"
+            else:
+                print "bbb"
+        #docnames.append(dname)
 
     
 
