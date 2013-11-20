@@ -64,15 +64,22 @@ for i in newIndex:
 
 newIndex[0].values()[0] #the term
 newIndex[0].values()[1] #the posting list
-newIndex[0].values()[1][0] #name of the document
-newIndex[0].values()[1][1] #term freq in that document
+newIndex[0].values()[1][0] #name of the first document + term freq in that doc
+newIndex[0].values()[1][1] #name of the second doc + term freq in that document
+newIndex[0].values()[1][0][0] #name of the first document
+newIndex[0].values()[1][0][1] # term frequency in the first doc
 
 doclist=[]
 
 for i in range(len(newIndex)):
     for j in range(len(newIndex[i].values()[1])):
         dname = newIndex[i].values()[1][j][0]
+        termFrequency = newIndex[i].values()[1][j][1]
         print dname
+        newEntry={'docname':dname, 'docinfo':termFrequency}
+        doclist.append(newEntry)
+
+print doclist
 
 
     
