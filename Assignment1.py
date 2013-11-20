@@ -4,33 +4,31 @@ from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 from collections import defaultdict
-
+from utilFunctions import *
 
 
 #process each document in the directory 'collection'
 doclist = glob.glob("collection/*.txt")
-startstring = 'collection\\'
-strlenStartString = len(startstring)
-endstring = '.txt'
-strlenEndString = len(endstring)
 
 stemmer=PorterStemmer()
 InvertedIndex = {}
 tot_tokens = []
-docidx = []
 
-for docname in doclist:
-    if docname.startswith(startstring):
-        docname = docname[strlenStartString:]
-    if docname.endswith(endstring):
-        docname = docname[:-strlenEndString]
-    print docname
-    file_content = open("collection\\" + docname+".txt").read()
+timeCounter=0
+for doc in doclist:
+    #made a progress bar for fun, remove it if you want
+    timeCounter=timeCounter+1;
+    steps=float(timeCounter)/len(doclist)
+    update_progress(steps)
+    #take the path of the doc
+    base=os.path.basename(doc)
+    #pick only the filename of the doc
+    cleanDocname= os.path.splitext(base)[0]
+    #print cleanDocname
+    file_content = open(doc).read()
     file_content = file_content.lower()
     #remove odd chars
     file_content = re.sub(r'[^a-z0-9 ]',' ',file_content)
-    #remove duplicates
-    #file_content = re.sub(r'\b(\w+)( \1\b)+', r'\1', file_content)
     #remove punctuation
     file_content = re.sub('[%s]' % re.escape(string.punctuation), '', file_content)
     #tokenization
@@ -38,8 +36,6 @@ for docname in doclist:
     #print "tokens before preprocessing: "+str(len(file_content))
     tot_tokens.append(len(file_content))
     #stemming + count term frequency
-
-    #self.file = [w for w in self.file if w not in stopwords.words('english')]
     d = defaultdict(int)
     stemmed_Words = []
     for word in file_content:
@@ -59,27 +55,19 @@ for docname in doclist:
     for word in noDuplicates:
         locations = InvertedIndex.setdefault(word, {})       
         d[word] = float(d[word])/stemlen
-        locations[docname] = d[word]
+        locations[cleanDocname] = d[word]
         #print word, d[word]
 
 print "total tokens: "+str(sum(tot_tokens))
-print "unique terms: "+str(len(InvertedIndex)) 
+print "unique terms: "+str(len(InvertedIndex))
 
-
+#save the index
 pickle.dump(InvertedIndex, open("SavedInvertedIndex.p", "wb"))
 
+#print the contents of index
+#printIndex(InvertedIndex)
 
 #loaded_data = pickle.load(open( "SavedInvertedIndex.p", "rb" ))
-#for i in loaded_data.items():
-#    print i
-
-#idxof = loaded_data['of'].items()
-#cnt = 0
-#for i in idxof:
-    #print i[1]
-    #cnt = cnt + i[1]
-
-#print "Of appears: " + str(cnt)
 
 
 
