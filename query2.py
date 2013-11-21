@@ -44,7 +44,6 @@ def getListOfDocsOfTerm(processedQuery):
         idx=-1
     return idx
 
-#-----------------It works only for 2 and more terms in the query, better doublecheck----------
 #example query 
 query = open("sampleQuery.txt")
 #process query
@@ -62,50 +61,28 @@ for i in processedQuery:
 for i in newIndex:
     print i
 
-<<<<<<< HEAD
-newIndex[0].values()[0] #the term
-newIndex[0].values()[1] #the posting list
-newIndex[0].values()[1][0] #name of the first document + term freq in that doc
-newIndex[0].values()[1][1] #name of the second doc + term freq in that document
-newIndex[0].values()[1][0][0] #name of the first document
-newIndex[0].values()[1][0][1] # term frequency in the first doc
-=======
-newIndex[0]['term'] #the term
-newIndex[0]['postlist'] #the posting list
-newIndex[0]['postlist'][0][0] #name of the document
-newIndex[0]['postlist'][0][1] #term freq in that document
-len(newIndex[0]['postlist']) #doc freq
->>>>>>> 097cd904ee585333aa5600b3d471881287e783a6
+print "Statistics"
+print newIndex[0]['term'] #the term
+print newIndex[0]['postlist'] #the posting list
+print newIndex[0]['postlist'][0][0] #name of the document
+print newIndex[0]['postlist'][0][1] #term freq in that document
+print len(newIndex[0]['postlist']) #doc freq
 
 doclist=[]
-docnames=[]
-
 for i in range(len(newIndex)):
     for j in range(len(newIndex[i].values()[1])):
-<<<<<<< HEAD
-        dname = newIndex[i].values()[1][j][0]
-        termFrequency = newIndex[i].values()[1][j][1]
-        print dname
-        newEntry={'docname':dname, 'docinfo':termFrequency}
-        doclist.append(newEntry)
-
-print doclist
-
-=======
         ent = []
         dname = newIndex[i]['postlist'][j][0]
-        print dname +" in newIndex"
-        #ent = {'docname':dname}
+        ent = {'docname':dname, 'termfrequency': newIndex[i]['postlist'][j][1]}
+        #print ent
         for k in doclist:
-            print k['docname'] +" in doclist"
+        #    print k['docname'] + " in doclist"
             if k['docname'] == dname:
                 print "aaa"
             else:
                 print "bbb"
-        #docnames.append(dname)
->>>>>>> 097cd904ee585333aa5600b3d471881287e783a6
+        doclist.append(ent)
 
-    
-
-
-    
+print "document names are"
+for i in doclist:
+    print i

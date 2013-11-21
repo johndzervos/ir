@@ -39,7 +39,7 @@ for doc in doclist:
     d = defaultdict(int)
     stemmed_Words = []
     for word in file_content:
-        if word not in stopwords.words('english'): 
+        #if word not in stopwords.words('english'): 
             stemmedWord = stemmer.stem(word)
             stemmedWord = word        
             stemmed_Words.append(stemmedWord)
@@ -58,8 +58,8 @@ for doc in doclist:
         locations[cleanDocname] = d[word]
         #print word, d[word]
 
-print "total tokens: "+str(sum(tot_tokens))
-print "unique terms: "+str(len(InvertedIndex))
+print "total tokens: " + str(sum(tot_tokens))
+print "unique terms: " + str(len(InvertedIndex))
 
 #save the index
 pickle.dump(InvertedIndex, open("SavedInvertedIndex.p", "wb"))
