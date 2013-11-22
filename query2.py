@@ -101,8 +101,9 @@ for i in range(len(doclist)):
     sss = {'dd':dn, 'ss': score}
     tfidfscores.append(sss)
 
-for i in tfidfscores:
+tfidfresult = sorted(tfidfscores, key=lambda k: k['ss'], reverse=True)
+for i in tfidfresult:
     print i
 
-print len(tfidfscores)
+print len(tfidfresult)
     

@@ -13,6 +13,7 @@ doclist = glob.glob("collection/*.txt")
 stemmer=PorterStemmer()
 InvertedIndex = {}
 tot_tokens = []
+docLength = []
 
 timeCounter=0
 for doc in doclist:
@@ -35,6 +36,8 @@ for doc in doclist:
     file_content = nltk.word_tokenize(file_content)
     #print "tokens before preprocessing: "+str(len(file_content))
     tot_tokens.append(len(file_content))
+    docInfo = {'document': cleanDocname, 'doclength': len(file_content)}
+    docLength.append(docInfo)
     #stemming + count term frequency
     d = defaultdict(int)
     stemmed_Words = []
@@ -46,7 +49,7 @@ for doc in doclist:
             d[stemmedWord] += 1
 
     stemlen = len(stemmed_Words)
-    noDuplicates= []   
+    noDuplicates= []
     for word in stemmed_Words:
         if word not in noDuplicates:
             noDuplicates.append(word)
@@ -63,6 +66,7 @@ print "unique terms: " + str(len(InvertedIndex))
 
 #save the index
 pickle.dump(InvertedIndex, open("SavedInvertedIndex.p", "wb"))
+pickle.dump(docLength, open("DocLength.p", "wb"))
 
 #print the contents of index
 #printIndex(InvertedIndex)
