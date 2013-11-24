@@ -42,9 +42,9 @@ for doc in doclist:
     d = defaultdict(int)
     stemmed_Words = []
     for word in file_content:
-        #if word not in stopwords.words('english'): 
+        if word not in stopwords.words('english'): 
             stemmedWord = stemmer.stem(word)
-            stemmedWord = word        
+            #stemmedWord = word        
             stemmed_Words.append(stemmedWord)
             d[stemmedWord] += 1
 
@@ -57,7 +57,7 @@ for doc in doclist:
     #build the inverted index
     for word in noDuplicates:
         locations = InvertedIndex.setdefault(word, {})       
-        d[word] = float(d[word])/stemlen
+        #d[word] = float(d[word])/stemlen
         locations[cleanDocname] = d[word]
         #print word, d[word]
 
@@ -68,10 +68,22 @@ print "unique terms: " + str(len(InvertedIndex))
 pickle.dump(InvertedIndex, open("SavedInvertedIndex.p", "wb"))
 pickle.dump(docLength, open("DocLength.p", "wb"))
 
-#print the contents of index
-#printIndex(InvertedIndex)
+print the contents of index
+printIndex(InvertedIndex)
 
-#loaded_data = pickle.load(open( "SavedInvertedIndex.p", "rb" ))
+##loaded_data = pickle.load(open( "SavedInvertedIndexCol.p", "rb" ))
+#-----Code to compute term collection frequency---------------
 
-
-
+##s=0
+##cf={}
+##for i in loaded_data:
+##    for j in loaded_data[i].values():
+##        s=s+j
+##    cf[i]=s
+##    s=0
+####for key, value in cf.iteritems() :
+####    print key, value
+##cf = pickle.load(open( "termColFreq.p", "rb" ))
+##for i in cf:
+##    cf[i]=float(cf[i])/698565
+  
