@@ -25,7 +25,6 @@ def update_progress(progress):
     print"\n"
     sys.stdout.write(text)
     sys.stdout.flush()
-    
 
 def preprocess(file_content):
     tot_tokens = []

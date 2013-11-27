@@ -36,7 +36,7 @@ def preprocessQuery(query):
     return stemmed_Words
 
 #example query 
-query = open("sampleQuery.txt")
+query = open("SecondQuery.txt")
 #process query
 processedQuery=preprocessQuery(query)
 print processedQuery
@@ -105,5 +105,11 @@ tfidfresult = sorted(tfidfscores, key=lambda k: k['ss'], reverse=True)
 for i in tfidfresult:
     print i
 
+#print "Started printing"
+#for i in range(len(tfidfresult)):
+#        print tfidfresult[i]['dd']
+
 print len(tfidfresult)
+
+generateFileTrecFormat(tfidfresult)
     
