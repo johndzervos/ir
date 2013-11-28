@@ -150,8 +150,8 @@ def computeLangModel(term,tf,Ld,opt, cf):
         score=inter*(tf/Ld)+(1-inter)*cf[term]
     if opt==2:
         #Dirichlet smoothing
-        alpha=0.2
-        score=(tf+alpha*cf[term])/Ld+alpha
+        alpha=1
+        score=(tf+alpha*cf[term])/(Ld+alpha)
     return score
 
 def LanguageModel(processedQuery, InvertedIndex, docInfo, collectionFrequency):
