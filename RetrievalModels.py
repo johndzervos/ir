@@ -86,9 +86,9 @@ def tfidf(processedQuery, InvertedIndex):
     tfidfresult = sorted(tfidfscores, key=lambda k: k['ss'], reverse=True)
     return tfidfresult
 
-def BM25(processedQuery, InvertedIndex, docInfo):
-    b = 0.75 # document length scaling
-    k1 = 1.5 # tunning parameter, choose a value between 1.2 and 5
+def BM25(processedQuery, InvertedIndex, docInfo, b, k1):
+    #b = 0.75 # document length scaling
+    #k1 = 1.5 # tunning parameter, choose a value between 1.2 and 5
     averageLength = 0
     for i in range(len(docInfo)):
         averageLength = averageLength + docInfo[i]['doclength']
@@ -233,10 +233,18 @@ def demo(ModelType):
         print "Finished"
     elif (ModelType == "BM25"):
         print "BM25"
-        bm25Result = BM25(firstProcessedQuery, InvertedIndex, docInfo)
-        generateFileTrecFormat(bm25Result, 'BM25EvaluationResult.txt', 1, "BM25")
-        bm25Result = BM25(secondProcessedQuery, InvertedIndex, docInfo)
-        generateFileTrecFormat(bm25Result, 'BM25EvaluationResult.txt', 2, "BM25")
+        b_list = [0.1, 0.5, 0.9]
+        k1_list = [1.5, 3.0, 4.5]
+        b = 0.75
+        k1 = 1.5
+
+        for b in b_list:
+            for k1 in k1_list:
+                bm25Result = BM25(firstProcessedQuery, InvertedIndex, docInfo,b, k1)
+                #filename = ['BM25EvaluationResult_' +str(b)+ '_' +str(k1)+ '.txt']
+                generateFileTrecFormat(bm25Result, 'BM25EvaluationResult_' +str(b)+ '_' +str(k1)+ '.txt', 1, "BM25")
+                bm25Result = BM25(secondProcessedQuery, InvertedIndex, docInfo, b, k1)
+                generateFileTrecFormat(bm25Result, 'BM25EvaluationResult_' +str(b)+ '_' +str(k1)+ '.txt', 2, "BM25")
         print "Finished"
     else:
         print "Language Model"
@@ -247,6 +255,6 @@ def demo(ModelType):
         print "Finished"
     
 #demo("TF-IDF")
-#demo("BM25")
-demo("Language")
+demo("BM25")
+#demo("Language")
 
