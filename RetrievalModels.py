@@ -10,9 +10,13 @@ from itertools import groupby, chain
 from operator import itemgetter
 import numpy as np, os
 
-items = os.listdir("collection/")
 # get the number of documnets inside collection
-NoOfDocumentsInsideCollection = len(items)
+items = os.listdir("collection/")
+newlist = []
+for docName in items:
+    if docName.endswith(".txt"):
+        newlist.append(docName)
+NoOfDocumentsInsideCollection = len(newlist)
 
 def preprocessQuery(query):
     tot_tokens = []
