@@ -151,19 +151,30 @@ def BM25(processedQuery, InvertedIndex, docInfo, b, k1):
     BM25result = sorted(okapiscores, key=lambda k: k['ss'], reverse=True)
     return BM25result
 
-def computeLangModel(term,tf,Ld,opt, cf, averageLength):
-    if opt==1:
+def computeLangModelLinearInterp(term,tf,Ld,cf,inter):
+   # if opt==1:
         #interpolation equation
-        inter=0.5
-        score=inter*(tf/Ld)+(1-inter)*cf[term]
-    if opt==2:
-        #Dirichlet smoothing
-        #alpha=0.8
-        alpha = averageLength
-        score=(tf+alpha*cf[term])/(Ld+alpha)
+        #inter=0.5
+    score=inter*(tf/Ld)+(1-inter)*cf[term]
+##    if opt==2:
+##        #Dirichlet smoothing
+##        alpha=1
+##        score=(tf+alpha*cf[term])/(Ld+alpha)
     return score
 
-def LanguageModel(processedQuery, InvertedIndex, docInfo, collectionFrequency):
+def computeLangModelDirichlet(term,tf,Ld, cf,alpha):
+##    if opt==1:
+##        #interpolation equation
+##        #inter=0.5
+##        score=inter*(tf/Ld)+(1-inter)*cf[term]
+##    if opt==2:
+##        #Dirichlet smoothing
+        #alpha=1
+    score=(tf+alpha*cf[term])/(Ld+alpha)
+    return score
+
+
+def LanguageModel(processedQuery, InvertedIndex, docInfo, collectionFrequency,opt,inter,alpha):
     averageLength = 0
     for i in range(len(docInfo)):
         averageLength = averageLength + docInfo[i]['doclength']
@@ -213,9 +224,12 @@ def LanguageModel(processedQuery, InvertedIndex, docInfo, collectionFrequency):
                 tf3 = doclist[i]['list'][j]['tf2']
                 df3 = doclist[i]['list'][j]['df2']
                 #choose smoothing, opt=1 -> linear interpolation, opt=2 ->dirichlet
-                opt=2
-                pscore=computeLangModel(doclist[i]['list'][j]['term'],tf3,dlength,opt, collectionFrequency, averageLength)
-                score=score+np.log10(pscore)
+                if(opt==1):
+                    pscore=computeLangModelLinearInterp(doclist[i]['list'][j]['term'],tf3,dlength, collectionFrequency,inter)
+                    score=score+np.log10(pscore)
+                if(opt==2):
+                    pscore=computeLangModelDirichlet(doclist[i]['list'][j]['term'],tf3,dlength, collectionFrequency,alpha)
+                    score=score+np.log10(pscore)
             sss = {'dd':dn, 'ss': score}
             langModelScore.append(sss)
     
@@ -224,9 +238,9 @@ def LanguageModel(processedQuery, InvertedIndex, docInfo, collectionFrequency):
 
 def demo(ModelType):
     stemmer=PorterStemmer()
-    InvertedIndex = pickle.load(open( "SavedInvertedIndex.p", "rb" ))
-    docInfo = pickle.load(open("DocLength.p", "rb"))
-    collectionFrequency = pickle.load(open( "termColFreq.p", "rb" ))
+    InvertedIndex = pickle.load(open( "SavedInvertedIndex.p", 'r' ))
+    docInfo = pickle.load(open("DocLength.p", 'r'))
+    collectionFrequency = pickle.load(open( "termColFreq.p", 'r' ))
     
     firstQuery = open("FirstQuery.txt")
     firstProcessedQuery=preprocessQuery(firstQuery)
@@ -246,7 +260,7 @@ def demo(ModelType):
         k1_list = [1.5, 3.0, 4.5]
         b = 0.75
         k1 = 1.5
-
+        
         for b in b_list:
             for k1 in k1_list:
                 bm25Result = BM25(firstProcessedQuery, InvertedIndex, docInfo,b, k1)
@@ -255,15 +269,26 @@ def demo(ModelType):
                 bm25Result = BM25(secondProcessedQuery, InvertedIndex, docInfo, b, k1)
                 generateFileTrecFormat(bm25Result, 'BM25EvaluationResult_' +str(b)+ '_' +str(k1)+ '.txt', 2, "BM25")
         print "Finished"
-    else:
-        print "Language Model"
-        langModelResult = LanguageModel(firstProcessedQuery, InvertedIndex, docInfo, collectionFrequency)
-        generateFileTrecFormat(langModelResult, 'LanguageModellingResult.txt', 1, "LanguageModelling")
-        langModelResult = LanguageModel(secondProcessedQuery, InvertedIndex, docInfo, collectionFrequency)
-        generateFileTrecFormat(langModelResult, 'LanguageModellingResult.txt', 2, "LanguageModelling")
+    elif (ModelType == "LangModelLinearInterp"):
+        inter_list = [0.0, 0.25, 0.5,0.75, 1]
+        print "Language Model LinearInterpolation"
+        for w in inter_list:
+            langModelResult = LanguageModel(firstProcessedQuery, InvertedIndex, docInfo, collectionFrequency,1,w,w)
+            generateFileTrecFormat(langModelResult, 'LangModelLinearInterpEvaluationResult_' +str(w)+ '.txt', 1, "LangModelLinearInterp")
+##            langModelResult = LanguageModel(secondProcessedQuery, InvertedIndex, docInfo, collectionFrequency)
+##            generateFileTrecFormat(langModelResult, 'LanguageModellingLinearInterpResult.txt', 2, "LanguageModellingLinearInterp")
+        print "Finished"
+    elif (ModelType == "LangModelDirichlet"):
+        alpha_list = [100,262, 300, 400,500, 1000]
+        print "Language Model LinearInterpolation"
+        for w in alpha_list:
+            langModelResult = LanguageModel(firstProcessedQuery, InvertedIndex, docInfo, collectionFrequency,2,w,w)
+            generateFileTrecFormat(langModelResult, 'LangModelDirichletEvaluationResult_' +str(w)+ '.txt', 1, "LangModelDirichlet")
+##            langModelResult = LanguageModel(secondProcessedQuery, InvertedIndex, docInfo, collectionFrequency)
+##            generateFileTrecFormat(langModelResult, 'LanguageModellingLinearInterpResult.txt', 2, "LanguageModellingLinearInterp")
         print "Finished"
     
-demo("TF-IDF")
-#demo("BM25")
+#demo("TF-IDF")
+demo("LangModelDirichlet")
 #demo("Language")
 
