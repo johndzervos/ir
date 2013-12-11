@@ -143,14 +143,15 @@ def BM25(processedQuery, InvertedIndex, docInfo, b, k1):
     BM25result = sorted(okapiscores, key=lambda k: k['ss'], reverse=True)
     return BM25result
 
-def computeLangModel(term,tf,Ld,opt, cf):
+def computeLangModel(term,tf,Ld,opt, cf, averageLength):
     if opt==1:
         #interpolation equation
         inter=0.5
         score=inter*(tf/Ld)+(1-inter)*cf[term]
     if opt==2:
         #Dirichlet smoothing
-        alpha=1
+        #alpha=0.8
+        alpha = averageLength
         score=(tf+alpha*cf[term])/(Ld+alpha)
     return score
 
@@ -205,7 +206,7 @@ def LanguageModel(processedQuery, InvertedIndex, docInfo, collectionFrequency):
                 df3 = doclist[i]['list'][j]['df2']
                 #choose smoothing, opt=1 -> linear interpolation, opt=2 ->dirichlet
                 opt=2
-                pscore=computeLangModel(doclist[i]['list'][j]['term'],tf3,dlength,opt, collectionFrequency)
+                pscore=computeLangModel(doclist[i]['list'][j]['term'],tf3,dlength,opt, collectionFrequency, averageLength)
                 score=score+np.log10(pscore)
             sss = {'dd':dn, 'ss': score}
             langModelScore.append(sss)
@@ -255,6 +256,6 @@ def demo(ModelType):
         print "Finished"
     
 #demo("TF-IDF")
-demo("BM25")
-#demo("Language")
+#demo("BM25")
+demo("Language")
 
