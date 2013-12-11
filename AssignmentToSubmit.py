@@ -6,9 +6,6 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from collections import defaultdict
 from utilFunctions import *
 
-#process each document in the directory 'collection'
-doclist = glob.glob("collection/*.txt")
-
 stemmer=PorterStemmer()
 InvertedIndex = {}
 tot_tokens = []

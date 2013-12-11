@@ -8,7 +8,11 @@ from utilFunctions import *
 import math,operator
 from itertools import groupby, chain
 from operator import itemgetter
-import numpy as np
+import numpy as np, os
+
+items = os.listdir("collection/")
+# get the number of documnets inside collection
+NoOfDocumentsInsideCollection = len(items)
 
 def preprocessQuery(query):
     tot_tokens = []
@@ -79,7 +83,7 @@ def tfidf(processedQuery, InvertedIndex):
             tf3 = doclist[i]['list'][j]['tf2']
             df3 = doclist[i]['list'][j]['df2']
             #tf-idf formula
-            score = score + (1+np.log10(tf3))*np.log10(262/df3)
+            score = score + (1+np.log10(tf3))*np.log10(NoOfDocumentsInsideCollection/df3)
         sss = {'dd':dn, 'ss': score}
         tfidfscores.append(sss)
 
@@ -92,7 +96,7 @@ def BM25(processedQuery, InvertedIndex, docInfo, b, k1):
     averageLength = 0
     for i in range(len(docInfo)):
         averageLength = averageLength + docInfo[i]['doclength']
-    averageLength = averageLength/262
+    averageLength = averageLength/NoOfDocumentsInsideCollection
     newIndex = []
     for i in processedQuery:
         if i in InvertedIndex:
@@ -137,7 +141,7 @@ def BM25(processedQuery, InvertedIndex, docInfo, b, k1):
                 tf3 = doclist[i]['list'][j]['tf2']
                 df3 = doclist[i]['list'][j]['df2']
                 #BM25 formula
-                score = score + np.log10(262/df3)* ((k1+1)*tf3)/(k1*((1-b) + b*(dlength/averageLength))+ tf3)
+                score = score + np.log10(NoOfDocumentsInsideCollection/df3)* ((k1+1)*tf3)/(k1*((1-b) + b*(dlength/averageLength))+ tf3)
             sss = {'dd':dn, 'ss': score}
             okapiscores.append(sss)
     BM25result = sorted(okapiscores, key=lambda k: k['ss'], reverse=True)
@@ -255,7 +259,7 @@ def demo(ModelType):
         generateFileTrecFormat(langModelResult, 'LanguageModellingResult.txt', 2, "LanguageModelling")
         print "Finished"
     
-#demo("TF-IDF")
+demo("TF-IDF")
 #demo("BM25")
-demo("Language")
+#demo("Language")
 
