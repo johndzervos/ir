@@ -167,7 +167,7 @@ def LanguageModel(processedQuery, InvertedIndex, docInfo, collectionFrequency):
     averageLength = 0
     for i in range(len(docInfo)):
         averageLength = averageLength + docInfo[i]['doclength']
-    averageLength = averageLength/262
+    averageLength = averageLength/NoOfDocumentsInsideCollection
     
     newIndex = []
     for i in processedQuery:
