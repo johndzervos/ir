@@ -234,6 +234,7 @@ def LanguageModel(processedQuery, InvertedIndex, docInfo, collectionFrequency,op
             langModelScore.append(sss)
     
     langModelresult = sorted(langModelScore, key=lambda k: k['ss'], reverse=True)
+    
     return langModelresult
 
 def demo(ModelType):
@@ -256,10 +257,9 @@ def demo(ModelType):
         print "Finished"
     elif (ModelType == "BM25"):
         print "BM25"
-        b_list = [0.1, 0.5, 0.9]
-        k1_list = [1.5, 3.0, 4.5]
-        b = 0.75
-        k1 = 1.5
+        b_list = [0.0, 0.25,0.5,0.75,1.0]
+        k1_list = [0.0,1.2,2.4, 3.6,4.8]
+      
         
         for b in b_list:
             for k1 in k1_list:
@@ -275,20 +275,54 @@ def demo(ModelType):
         for w in inter_list:
             langModelResult = LanguageModel(firstProcessedQuery, InvertedIndex, docInfo, collectionFrequency,1,w,w)
             generateFileTrecFormat(langModelResult, 'LangModelLinearInterpEvaluationResult_' +str(w)+ '.txt', 1, "LangModelLinearInterp")
-##            langModelResult = LanguageModel(secondProcessedQuery, InvertedIndex, docInfo, collectionFrequency)
-##            generateFileTrecFormat(langModelResult, 'LanguageModellingLinearInterpResult.txt', 2, "LanguageModellingLinearInterp")
+            langModelResult = LanguageModel(secondProcessedQuery, InvertedIndex, docInfo, collectionFrequency,1,w,w)
+            generateFileTrecFormat(langModelResult, 'LangModelLinearInterpEvaluationResult_' +str(w)+ '.txt', 2, "LangModelLinearInterp")
         print "Finished"
     elif (ModelType == "LangModelDirichlet"):
-        alpha_list = [100,262, 300, 400,500, 1000]
-        print "Language Model LinearInterpolation"
+        alpha_list = [26.66,266.6, 2666, 26660,266600]
+        print "LangModelDirichlet"
         for w in alpha_list:
             langModelResult = LanguageModel(firstProcessedQuery, InvertedIndex, docInfo, collectionFrequency,2,w,w)
             generateFileTrecFormat(langModelResult, 'LangModelDirichletEvaluationResult_' +str(w)+ '.txt', 1, "LangModelDirichlet")
-##            langModelResult = LanguageModel(secondProcessedQuery, InvertedIndex, docInfo, collectionFrequency)
-##            generateFileTrecFormat(langModelResult, 'LanguageModellingLinearInterpResult.txt', 2, "LanguageModellingLinearInterp")
+            langModelResult = LanguageModel(secondProcessedQuery, InvertedIndex, docInfo, collectionFrequency,2,w,w)
+            generateFileTrecFormat(langModelResult, 'LangModelDirichletEvaluationResult_' +str(w)+ '.txt', 2, "LangModelDirichlet")
+        print "Finished"
+    elif (ModelType == "Combined"):
+       
+        lambda_list=[0.0,0.125,0.25,0.375,0.50,0.625,0.75,0.825,1.0]
+        print "Combined"
+        weight=0.5
+        for w in lambda_list:
+            combinedModelScore = []
+            langModelResult = LanguageModel(firstProcessedQuery, InvertedIndex, docInfo, collectionFrequency,1,0.75,0.75)
+            bm25Result = BM25(firstProcessedQuery, InvertedIndex, docInfo,0.5, 4.8)
+            for i in langModelResult:
+                for j in bm25Result:
+                    if (j['dd']==i['dd']):
+                         sss = {'dd':j['dd'], 'ss': w*j['ss']+(1-w)*i['ss']}
+                         combinedModelScore.append(sss)
+            combinedModelResult = sorted(combinedModelScore, key=lambda k: k['ss'], reverse=True)
+            generateFileTrecFormat(combinedModelResult, 'CombinedModel_' +str(w)+ '.txt', 1, "CombinedModel")
+
+            combinedModelScore = []
+            combinedModelResult =[]
+            langModelResult = LanguageModel(secondProcessedQuery, InvertedIndex, docInfo, collectionFrequency,1,0.75,0.75)
+            bm25Result = BM25(secondProcessedQuery, InvertedIndex, docInfo,0.5, 4.8)
+            for i in langModelResult:
+                for j in bm25Result:
+                    if (j['dd']==i['dd']):
+                         sss = {'dd':j['dd'], 'ss': w*j['ss']+(1-w)*i['ss']}
+                         combinedModelScore.append(sss)
+            combinedModelResult = sorted(combinedModelScore, key=lambda k: k['ss'], reverse=True)
+            generateFileTrecFormat(combinedModelResult, 'CombinedModel_' +str(w)+ '.txt', 2, "CombinedModel")
+
+    ##            generateFileTrecFormat(langModelResult, 'LangModelLinearInterpEvaluationResult_' +str(w)+ '.txt', 2, "LangModelLinearInterp")
+        print len(combinedModelResult)
         print "Finished"
     
 #demo("TF-IDF")
-demo("LangModelDirichlet")
+demo( "Combined")
+##demo("LangModelLinearInterp")
+##demo("LangModelDirichlet")
 #demo("Language")
 
